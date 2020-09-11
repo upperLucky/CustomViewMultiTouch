@@ -11,7 +11,7 @@ import com.upperlucky.customviewmultitouch.getAvator
 
 /**
  * created by yunKun.wen on 2020/9/11
- * desc:
+ * desc: 协作
  */
 
 private val BITMAP_WIDTH = 200.dp
@@ -27,7 +27,6 @@ class MultiTouchView2(context: Context?, attrs: AttributeSet?) : View(context, a
     private var offsetY = 0f
     private var originalOffsetX = 0f
     private var originalOffsetY = 0f
-    private var trackingPointerId = 0  // 跟踪起作用的那个手指
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -36,22 +35,31 @@ class MultiTouchView2(context: Context?, attrs: AttributeSet?) : View(context, a
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        var focusX : Float
-        var focusY : Float
+        var focusX: Float
+        var focusY: Float
         var sumX = 0f
         var sumY = 0f
 
-        for (i in 0 until event.pointerCount - 1) {
-            sumX += event.getX(i)
-            sumY += event.getY(i)
+        var pointerCount = event.pointerCount
+
+        val actionPointUp = event.actionMasked == MotionEvent.ACTION_POINTER_UP
+
+        for (i in 0 until pointerCount) {
+            if (!(actionPointUp && i == event.actionIndex)) {
+                sumX += event.getX(i)
+                sumY += event.getY(i)
+            }
         }
 
-        focusX = sumX / event.pointerCount
-        focusY = sumY / event.pointerCount
+        if (actionPointUp) {
+            pointerCount--
+        }
+
+        focusX = sumX / pointerCount
+        focusY = sumY / pointerCount
 
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_POINTER_UP -> {
-                trackingPointerId = event.getPointerId(0)
                 downX = focusX
                 downY = focusY
                 originalOffsetX = offsetX
@@ -59,7 +67,7 @@ class MultiTouchView2(context: Context?, attrs: AttributeSet?) : View(context, a
             }
             MotionEvent.ACTION_MOVE -> {
                 offsetX = focusX - downX + originalOffsetX
-                offsetY =focusY - downY + originalOffsetY
+                offsetY = focusY - downY + originalOffsetY
                 invalidate()
             }
         }

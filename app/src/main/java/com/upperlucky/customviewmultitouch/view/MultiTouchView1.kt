@@ -11,7 +11,7 @@ import com.upperlucky.customviewmultitouch.getAvator
 
 /**
  * created by yunKun.wen on 2020/9/11
- * desc:
+ * desc: 接力
  */
 
 private val BITMAP_WIDTH = 200.dp
