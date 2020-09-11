@@ -44,7 +44,7 @@ class MultiTouchView1(context: Context?, attrs: AttributeSet?) : View(context, a
                 originalOffsetY = offsetY
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
-                var actionIndex = event.actionIndex
+                val actionIndex = event.actionIndex
                 trackingPointerId = event.getPointerId(actionIndex)
                 downX = event.getX(actionIndex)
                 downY = event.getY(actionIndex)
@@ -53,11 +53,19 @@ class MultiTouchView1(context: Context?, attrs: AttributeSet?) : View(context, a
 
             }
             MotionEvent.ACTION_POINTER_UP -> {
-                var actionIndex = event.actionIndex
-                trackingPointerId = if (trackingPointerId == event.getPointerId(actionIndex)) {
-                    event.getPointerId(event.pointerCount - 2)
-                } else {
-                    event.getPointerId(event.pointerCount - 1)
+                val actionIndex = event.actionIndex
+                val pointId = event.getPointerId(actionIndex)
+                if (trackingPointerId == pointId) {
+                    val newIndex = if (actionIndex == event.pointerCount - 1) {
+                        event.pointerCount - 2
+                    } else {
+                        event.pointerCount - 1
+                    }
+                    trackingPointerId = event.getPointerId(newIndex)
+                    downX = event.getX(newIndex)
+                    downY = event.getY(newIndex)
+                    originalOffsetX = offsetX
+                    originalOffsetY = offsetY
                 }
             }
             MotionEvent.ACTION_MOVE -> {
