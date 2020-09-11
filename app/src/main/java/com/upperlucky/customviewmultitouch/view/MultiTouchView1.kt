@@ -53,7 +53,12 @@ class MultiTouchView1(context: Context?, attrs: AttributeSet?) : View(context, a
 
             }
             MotionEvent.ACTION_POINTER_UP -> {
-                
+                var actionIndex = event.actionIndex
+                trackingPointerId = if (trackingPointerId == event.getPointerId(actionIndex)) {
+                    event.getPointerId(event.pointerCount - 2)
+                } else {
+                    event.getPointerId(event.pointerCount - 1)
+                }
             }
             MotionEvent.ACTION_MOVE -> {
                 offsetX = event.getX(event.findPointerIndex(trackingPointerId)) - downX + originalOffsetX
