@@ -29,6 +29,7 @@ class MultiTouchView3(context: Context?, attrs: AttributeSet?) : View(context, a
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         for (index in 0 until paths.size()) {
+            // SparseArray 的取法，get(key) 方法取的是对应的 key 的值，valueAt(index) 取的才是对应 index 的值
             val path = paths.valueAt(index)
             canvas.drawPath(path, paint)
         }
