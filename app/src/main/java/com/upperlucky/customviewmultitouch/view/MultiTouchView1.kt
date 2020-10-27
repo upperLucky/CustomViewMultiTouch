@@ -27,7 +27,7 @@ class MultiTouchView1(context: Context?, attrs: AttributeSet?) : View(context, a
     private var offsetY = 0f
     private var originalOffsetX = 0f
     private var originalOffsetY = 0f
-    private var trackingPointerId = 0  // 跟踪起作用的那个手指
+    private var trackingPointerId = 0  // 跟踪起作用的那个手指的id
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -56,6 +56,7 @@ class MultiTouchView1(context: Context?, attrs: AttributeSet?) : View(context, a
                 val actionIndex = event.actionIndex
                 val pointId = event.getPointerId(actionIndex)
                 if (trackingPointerId == pointId) {
+                    // 当手指抬起时，这个序列中的 pointerCount 并不会减1，所以需要对这个情况特殊处理
                     val newIndex = if (actionIndex == event.pointerCount - 1) {
                         event.pointerCount - 2
                     } else {

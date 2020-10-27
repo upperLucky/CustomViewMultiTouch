@@ -42,6 +42,9 @@ class MultiTouchView2(context: Context?, attrs: AttributeSet?) : View(context, a
 
         var pointerCount = event.pointerCount
 
+        /**
+         * 当一根手指抬起的瞬间，在这个序列中，pointerCount并不会减1
+         */
         val actionPointUp = event.actionMasked == MotionEvent.ACTION_POINTER_UP
 
         for (i in 0 until pointerCount) {
